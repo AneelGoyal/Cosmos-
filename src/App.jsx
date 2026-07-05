@@ -2,6 +2,10 @@ import { useState } from 'react'
 import AdminDashboard from './components/AdminDashboard'
 import OMRScanner from './components/OMRScanner'
 import StudentPortal from './components/StudentPortal'
+import ClassManagement from './components/ClassManagement'
+import TestGenerator from './components/TestGenerator'
+import BulkProcessor from './components/BulkProcessor'
+import ReportingEngine from './components/ReportingEngine'
 import {
   LayoutDashboard,
   ClipboardList,
@@ -9,7 +13,11 @@ import {
   BarChart3,
   Settings,
   LogOut,
-  UserCircle
+  UserCircle,
+  Users,
+  Printer,
+  Layers,
+  FileSpreadsheet
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -23,22 +31,28 @@ function App() {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'tests', label: 'Test Management', icon: ClipboardList },
-    { id: 'scanner', label: 'OMR Scanner', icon: Scan },
-    { id: 'analytics', label: 'Student Analytics', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'classes', label: 'Class Management', icon: Users },
+    { id: 'generator', label: 'Test Generator', icon: Printer },
+    { id: 'scanner', label: 'Smart Scanner', icon: Scan },
+    { id: 'bulk', label: 'Bulk Processor', icon: Layers },
+    { id: 'reports', label: 'Performance Reports', icon: FileSpreadsheet },
     { id: 'student', label: 'Student Portal', icon: UserCircle },
   ]
 
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-      case 'tests':
-      case 'analytics':
-      case 'settings':
         return <AdminDashboard onLaunchScanner={() => setActiveTab('scanner')} />
+      case 'classes':
+        return <ClassManagement />
+      case 'generator':
+        return <TestGenerator />
       case 'scanner':
         return <OMRScanner />
+      case 'bulk':
+        return <BulkProcessor />
+      case 'reports':
+        return <ReportingEngine />
       case 'student':
         return <StudentPortal />
       default:
@@ -59,13 +73,13 @@ function App() {
           </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1">
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-left",
                 activeTab === item.id
                   ? "bg-electric text-white shadow-lg shadow-electric/20"
                   : "text-slate-400 hover:bg-slate-800 hover:text-white"
@@ -75,7 +89,7 @@ function App() {
                 "w-5 h-5",
                 activeTab === item.id ? "text-white" : "text-slate-400 group-hover:text-white"
               )} />
-              <span className="font-medium">{item.label}</span>
+              <span className="font-medium whitespace-nowrap">{item.label}</span>
             </button>
           ))}
         </nav>
